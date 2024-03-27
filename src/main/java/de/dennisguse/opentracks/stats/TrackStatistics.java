@@ -393,4 +393,20 @@ public class TrackStatistics {
                 + "; Altitude Gain: " + getTotalAltitudeGain()
                 + "; Altitude Loss: " + getTotalAltitudeLoss() + "}";
     }
+
+    private List<TrackPoint> filterRecentTrackPoints(TrackPoint currentTrackPoint) {
+        List<TrackPoint> recentTrackPoints = new ArrayList<>();
+        Instant currentTime = currentTrackPoint.getTime();
+
+        // Iterate through track points and include only those within the last 20 seconds
+        for (TrackPoint point : trackPoints) {
+            Instant pointTime = point.getTime();
+            Duration timeDifference = Duration.between(pointTime, currentTime);
+            if (!timeDifference.isNegative() && timeDifference.getSeconds() <= 20) {
+                recentTrackPoints.add(point);
+            }
+        }
+
+        return recentTrackPoints;
+    }
 }
