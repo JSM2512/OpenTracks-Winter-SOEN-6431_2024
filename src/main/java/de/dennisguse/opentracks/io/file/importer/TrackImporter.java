@@ -293,24 +293,20 @@ public class TrackImporter {
     }
 
     /**
-     * Calculates the total time spent on a chairlift given the current track point and acceleration threshold.
+     * Finds the start time of the chair lift ride with respect to the provided acceleration threshold.
      *
-     * @param currentTrackPoint The current track point on the chairlift.
-     * @param acceleration The acceleration threshold to determine if the chairlift is moving.
-     * @return The total time spent on the chairlift in seconds.
+     * @param trackPoints       The list of track points representing the ski lift trajectory
+     * @param currentTrackPoint The current track point
+     * @param acceleration      The acceleration threshold
+     * @return                  The start time of the chair lift ride
      */
-    public long getTotalTimeOnChairLift(TrackPoint currentTrackPoint, double acceleration) {
-        // Initialize start and end times with the current track point's time
-        Instant startTime = currentTrackPoint.getTime(), endTime = currentTrackPoint.getTime();
+    public Instant findStartTimeWithAccelerationThreshold(List<TrackPoint> trackPoints, TrackPoint currentTrackPoint, double acceleration) {
+        Instant startTime = currentTrackPoint.getTime(); // Initialize start time
+        double altitudeDifference = -1; // Initialize altitude difference
 
-        // Initialize altitude difference
-        double altitudeDifference = -1;
+        TrackPoint previousTrackPoint = trackPoints.get(trackPoints.size() - 1); // Get the last track point in the list
 
-        // Get the last track point in the list
-        TrackPoint previousTrackPoint = trackPoints.get(trackPoints.size() - 1);
-
-        // Iterate through track points in reverse order
-        for (int i = trackPoints.size() - 2; i > 0; i--) {
+        for (int i = trackPoints.size() - 2; i > 0; i--) { // Iterate through track points in reverse order
             TrackPoint selectedTrackPoint = trackPoints.get(i);
             double currentAltitudeDifference = previousTrackPoint.getAltitude().toM() - selectedTrackPoint.getAltitude().toM();
 
@@ -320,10 +316,25 @@ public class TrackImporter {
                 altitudeDifference = currentAltitudeDifference; // Update altitude difference
             }
         }
-
-        // Calculate total time spent on chairlift
-        return endTime.getEpochSecond() - startTime.getEpochSecond();
+        return startTime;
     }
+
+    /**
+     * Calculates the total time spent on the chair lift ride based on the start time and current time.
+     *
+     * @param trackPoints       The list of track points representing the ski lift trajectory
+     * @param currentTrackPoint The current track point
+     * @param acceleration      The acceleration threshold
+     * @return                  The total time spent on the chair lift ride in seconds
+     */
+    public double calculateTotalTimeOnChairLift(List<TrackPoint> trackPoints, TrackPoint currentTrackPoint, double acceleration) {
+        Instant startTime = findStartTimeWithAccelerationThreshold(trackPoints, currentTrackPoint, acceleration);
+        Instant endTime = currentTrackPoint.getTime();
+
+        // Calculate total time on chair lift
+        return Duration.between(startTime, endTime).getSeconds();
+    }
+
     public boolean isEnteringChairlift(TrackPoint currentTrackPoint, double elevationThreshold) {
         List<TrackPoint> recentTrackPoints = filterRecentTrackPoints(currentTrackPoint);
         if (recentTrackPoints.isEmpty()) {
