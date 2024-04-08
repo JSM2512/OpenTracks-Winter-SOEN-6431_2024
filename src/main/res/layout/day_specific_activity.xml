@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.aggregatedStatistics.daySpecificStats.DaySpecificActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/segment_list_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="@string/app_name"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingBottom="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/segment_list"
+            android:layout_width="match_parent"
+            android:background="#D0D0D0"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            app:layoutManager="LinearLayoutManager"/>
+    </LinearLayout>
+
+
+    <include
+        android:id="@+id/bottom_app_bar_layout"
+        layout="@layout/bottomappbar" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

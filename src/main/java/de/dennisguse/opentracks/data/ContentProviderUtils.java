@@ -32,13 +32,16 @@ import androidx.annotation.VisibleForTesting;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
-
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import de.dennisguse.opentracks.BuildConfig;
 import de.dennisguse.opentracks.data.models.ActivityType;
 import de.dennisguse.opentracks.data.models.Altitude;
@@ -261,6 +264,21 @@ public class ContentProviderUtils {
 
     public Track getTrack(@NonNull Track.Id trackId) {
         try (Cursor cursor = getTrackCursor(TracksColumns._ID + "=?", new String[]{Long.toString(trackId.id())}, null)) {
+            if (cursor != null && cursor.moveToNext()) {
+                return createTrack(cursor);
+            }
+        }
+        return null;
+    }
+    public Track getTrack(@NonNull Date date) {
+        long millisecondsSinceEpoch = date.getTime();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate modifiedLocalDate = localDate.plusDays(1);
+        Date modifiedDate = Date.from(modifiedLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        long millisNextDaySinceEpoch = modifiedDate.getTime();
+
+        String query = TracksColumns.STARTTIME  + ">? AND " + TracksColumns.STARTTIME + "<=?";
+        try (Cursor cursor = getTrackCursor(query, new String[]{Long.toString(millisecondsSinceEpoch), Long.toString(millisNextDaySinceEpoch)}, TracksColumns._ID)) {
             if (cursor != null && cursor.moveToNext()) {
                 return createTrack(cursor);
             }

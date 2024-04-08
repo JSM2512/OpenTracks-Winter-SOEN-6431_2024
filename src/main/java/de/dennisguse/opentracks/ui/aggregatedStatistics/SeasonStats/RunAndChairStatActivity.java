@@ -14,18 +14,25 @@ import androidx.fragment.app.FragmentTransaction;
 
 import de.dennisguse.opentracks.R;
 import de.dennisguse.opentracks.databinding.ActivityRunAndChairStatBinding;
+import de.dennisguse.opentracks.databinding.FragmentRunsStatBinding;
 
 public class RunAndChairStatActivity extends AppCompatActivity {
 
     ActivityRunAndChairStatBinding binding;
+    FragmentRunsStatBinding fragmentRunsStatBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityRunAndChairStatBinding.inflate(getLayoutInflater());
+        fragmentRunsStatBinding = FragmentRunsStatBinding.inflate(getLayoutInflater());
 
         EdgeToEdge.enable(this);
         setContentView(binding.getRoot());
+
+        replaceFragment(new RunsStatFragment());
+
+
         binding.bottomNavigationViewSeasons.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.runs_frag) {
                 replaceFragment(new RunsStatFragment());
@@ -47,17 +54,17 @@ public class RunAndChairStatActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (fragment instanceof RunsStatFragment) {
             Intent intent = this.getIntent();
-            String seasonName = "123";
-            String days = "123";
-            String runs = "123";
-            String resort = "123";
-            String vertical_m = "123";
-            String distance = "123";
-            String active= "123";
-            String max_Speed="123";
-            String max_alt="123";
-            String tallestRun="123";
-            String longestRun="123";
+            String seasonName = "Summer 2024";
+            String days = "12";
+            String runs = "12";
+            String resort = "2";
+            String vertical_m = "10024";
+            String distance = "231";
+            String active= "12";
+            String max_Speed="6.3";
+            String max_alt="10.45";
+            String tallestRun="9.31";
+            String longestRun="25";
             if (intent != null){
 
                 seasonName = intent.getStringExtra("seasonName");

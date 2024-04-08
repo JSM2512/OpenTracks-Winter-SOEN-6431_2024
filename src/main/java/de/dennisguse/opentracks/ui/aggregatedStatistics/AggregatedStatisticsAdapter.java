@@ -22,6 +22,7 @@ import de.dennisguse.opentracks.databinding.AggregatedStatsListItemBinding;
 import de.dennisguse.opentracks.settings.PreferencesUtils;
 import de.dennisguse.opentracks.settings.UnitSystem;
 import de.dennisguse.opentracks.ui.aggregatedStatistics.SeasonStats.SeasonStatActivity;
+import de.dennisguse.opentracks.ui.aggregatedStatistics.daySpecificStats.DaySpecificActivity;
 import de.dennisguse.opentracks.util.StringUtils;
 
 public class AggregatedStatisticsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -93,20 +94,30 @@ public class AggregatedStatisticsAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             });
 
-            viewBinding.runsAndLiftsButton.setOnClickListener(new View.OnClickListener(){
+            viewBinding.runsAndLiftsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
-                    Intent intent=new Intent(v.getContext(), CalendarActivity.class);
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), CalendarActivity.class);
                     intent.putExtra("Display Fields", "Runs and Lifts");
                     v.getContext().startActivity(intent);
                 }
             });
-            viewBinding.elevationAndSpeedButton.setOnClickListener(new View.OnClickListener(){
+            viewBinding.elevationAndSpeedButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v){
-                    Intent intent=new Intent(v.getContext(), CalendarActivity.class);
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), CalendarActivity.class);
                     intent.putExtra("Display Fields", "Elevation and Speed");
                     v.getContext().startActivity(intent);
+                }
+            });
+
+            viewBinding.calendarButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Context context = viewBinding.getRoot().getContext();
+                    Intent intent = new Intent(context, DaySpecificActivity.class);
+                    context.startActivity(intent);
                 }
             });
         }
