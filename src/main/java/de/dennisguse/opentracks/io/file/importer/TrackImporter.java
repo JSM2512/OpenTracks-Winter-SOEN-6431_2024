@@ -268,6 +268,28 @@ public class TrackImporter {
         markers.addAll(doneMarkers);
     }
 
+    public List<TrackPoint> chairLiftSegment(List<TrackPoint> trackPoints, double elevationThreshold)
+    {
+        List<TrackPoint> currentSegment = new ArrayList<>();
+        for (int i=1;i<trackPoints.size();i++)
+        {
+            TrackPoint previousPoint = trackPoints.get(i - 1);
+            TrackPoint currentPoint = trackPoints.get(i);
+            double currentElevation = currentPoint.getAltitude().toM();
+            double previousElevation = previousPoint.getAltitude().toM();
+            double elevationDifference = Math.abs(currentElevation - previousElevation);
+            if (elevationDifference > elevationThreshold) // TrackPoints are added to the list
+            {
+                currentSegment.add(currentPoint);
+            }
+            else if (elevationDifference<=elevationThreshold) // The chairlift has stopped gaining altitude
+            {
+                break;
+            }
+        }
+        return currentSegment; // list is returned.
+    }
+
     /**
      * Gets the photo url for a file.
      *
